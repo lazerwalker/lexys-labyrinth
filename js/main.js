@@ -16,6 +16,7 @@ import { Tileset, TILESET_LAYOUTS, parse_tile_world_large_tileset, infer_tileset
 import TILE_TYPES from './tiletypes.js';
 import { random_choice, mk, mk_svg } from './util.js';
 import * as util from './util.js';
+import { setUpCommunication } from './communication.js'
 
 const PAGE_TITLE = "Lexy's Labyrinth";
 // This prefix is LLDEMO in base64, used to be somewhat confident that a string is a valid demo
@@ -3862,13 +3863,15 @@ class Conductor {
 
 
         // Bind the header buttons
-        document.querySelector('#main-options').addEventListener('click', () => {
+        document.querySelector('#main-options')?.addEventListener('click', () => {
             new OptionsOverlay(this).open();
         });
-        document.querySelector('#main-compat').addEventListener('click', () => {
+        document.querySelector('#main-compat')?.addEventListener('click', () => {
             new CompatOverlay(this).open();
         });
-        document.querySelector('#main-compat output').textContent = COMPAT_RULESET_LABELS[this._compat_ruleset ?? 'custom'];
+
+        const compatOutput = document.querySelector('#main-compat output')
+        if (compatOutput) compatOutput.textContent = COMPAT_RULESET_LABELS[this._compat_ruleset ?? 'custom'];
 
         // Bind to the navigation headers, which list the current level pack
         // and level
@@ -3877,45 +3880,45 @@ class Conductor {
         this.nav_prev_button = document.querySelector('#main-prev-level');
         this.nav_next_button = document.querySelector('#main-next-level');
         this.nav_choose_level_button = document.querySelector('#main-choose-level');
-        this.nav_prev_button.addEventListener('click', ev => {
+        this.nav_prev_button?.addEventListener('click', ev => {
             // TODO confirm
             if (this.stored_game && this.level_index > 0) {
                 this.change_level(this.level_index - 1);
             }
             ev.target.blur();
         });
-        this.nav_next_button.addEventListener('click', ev => {
+        this.nav_next_button?.addEventListener('click', ev => {
             // TODO confirm
             if (this.stored_game && this.level_index < this.stored_game.level_metadata.length - 1) {
                 this.change_level(this.level_index + 1);
             }
             ev.target.blur();
         });
-        this.nav_choose_level_button.addEventListener('click', ev => {
+        this.nav_choose_level_button?.addEventListener('click', ev => {
             if (! this.stored_game)
                 return;
 
             this.current.open_level_browser();
             ev.target.blur();
         });
-        document.querySelector('#main-test-pack').addEventListener('click', ev => {
+        document.querySelector('#main-test-pack')?.addEventListener('click', ev => {
             if (! this._pack_test_dialog) {
                 this._pack_test_dialog = new PackTestDialog(this);
             }
             this._pack_test_dialog.open();
         });
-        document.querySelector('#main-change-pack').addEventListener('click', ev => {
+        document.querySelector('#main-change-pack')?.addEventListener('click', ev => {
             // TODO confirm
             this.switch_to_splash();
         });
-        document.querySelector('#player-edit').addEventListener('click', ev => {
+        document.querySelector('#player-edit')?.addEventListener('click', ev => {
             // TODO should be able to jump to editor if we started in the
             // player too!  but should disable score tracking, have a revert
             // button, not be able to save over it, have a warning about
             // cheating...
             this.switch_to_editor();
         });
-        document.querySelector('#editor-play').addEventListener('click', ev => {
+        document.querySelector('#editor-play')?.addEventListener('click', ev => {
             // Restart the level to ensure it takes edits into account
             // TODO need to finish thinking out the exact flow between editor/player and what happens when...
             if (this.loaded_in_player) {
@@ -3925,7 +3928,7 @@ class Conductor {
         });
 
         // Bind the secret debug button: the icon in the lower left
-        document.querySelector('#header-icon').addEventListener('click', ev => {
+        document.querySelector('#header-icon')?.addEventListener('click', ev => {
             if (! this.player.debug.enabled) {
                 new ConfirmOverlay(this,
                     "Enable debug mode?  This will give you lots of toys to play with, " +
@@ -4013,7 +4016,13 @@ class Conductor {
 
         this.update_nav_buttons();
         document.querySelector('#loading').setAttribute('hidden', '');
-        this.switch_to_splash();
+
+        // Force load the classic pack and start on the player
+        // TODO: Include CHIPS.DAT if we have permission
+        const cclp1 = BUILTIN_LEVEL_PACKS.find(p => p.ident === 'cclp1');
+        await this.fetch_pack(cclp1.path, cclp1.title);
+        this.switch_to_player();
+        // this.switch_to_splash()
     }
 
     switch_to_splash() {
@@ -4184,16 +4193,28 @@ class Conductor {
     }
 
     update_level_title() {
-        this.level_pack_name_el.textContent = this.stored_game.title;
-        this.level_name_el.textContent = `Level ${this.stored_level.number} — ${this.stored_level.title}`;
+        if (this.level_pack_name_el) {
+            this.level_pack_name_el.textContent = this.stored_game.title;
+        }
+        if (this.level_name_el) {
+            this.level_name_el.textContent = `Level ${this.stored_level.number} — ${this.stored_level.title}`;
+        }
 
         document.title = `${this.stored_level.title} [#${this.stored_level.number}] — ${this.stored_game.title} — ${PAGE_TITLE}`;
     }
 
     update_nav_buttons() {
-        this.nav_choose_level_button.disabled = !this.stored_game;
-        this.nav_prev_button.disabled = !this.stored_game || this.level_index <= 0;
-        this.nav_next_button.disabled = !this.stored_game || this.level_index >= this.stored_game.level_metadata.length - 1;
+        if (this.nav_choose_level_button) {
+            this.nav_choose_level_button.disabled = !this.stored_game;
+        }
+
+        if (this.nav_prev_button) {
+            this.nav_prev_button.disabled = !this.stored_game || this.level_index <= 0;
+        }
+
+        if (this.nav_next_button) {
+            this.nav_next_button.disabled = !this.stored_game || this.level_index >= this.stored_game.level_metadata.length - 1;
+        }
     }
 
     set_compat(ruleset, flags) {
@@ -4204,7 +4225,8 @@ class Conductor {
             this._compat_ruleset = ruleset;
         }
 
-        document.querySelector('#main-compat output').textContent = COMPAT_RULESET_LABELS[ruleset];
+        const compatOutput = document.querySelector('#main-compat output')
+        if (compatOutput) compatOutput.textContent = COMPAT_RULESET_LABELS[ruleset];
 
         this.compat = flags;
     }
@@ -4337,6 +4359,7 @@ class Conductor {
 
 
 async function main() {
+    setUpCommunication()
     let local = !! location.host.match(/localhost/);
     let query = new URLSearchParams(location.search);
 

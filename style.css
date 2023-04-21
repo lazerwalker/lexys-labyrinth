@@ -3,6 +3,13 @@ html {
     height: 100%;
 }
 body {
+    /* This block to disable scrolling, feels like there's a better solution */
+    position: fixed; 
+    left: 0; 
+    top: 0; 
+    right: 0; 
+    bottom: 0;
+
     height: 100%;
     margin: 0;
     box-sizing: border-box;
@@ -1166,6 +1173,9 @@ ol.packtest-summary > li {
     --scale: 1;
 }
 #player-main {
+    width: 100%;
+    height: 100%;
+
     /* This element basically just exists so that #player can have relative positioning and the
      * debug panel can use that to sit against the right edge; absolute positioning excludes
      * margins, so if it were positioned as a child of THIS element, it would be stuffed into the
@@ -1330,6 +1340,9 @@ ol.packtest-summary > li {
 }
 
 #player-game-area {
+    width: 100%;
+    height: 100%;
+
     grid-area: game;
     /* don't stretch if the buttons or music blow out somehow */
     justify-self: center;
@@ -1363,8 +1376,8 @@ ol.packtest-summary > li {
 }
 .level canvas {
     display: block;
-    width: calc(var(--viewport-width) * var(--tile-width) * var(--scale));
-    height: calc(var(--viewport-height) * var(--tile-height) * var(--scale));
+    width: 100%;
+    height: 100%; 
     --viewport-width: 9;
     --viewport-height: 9;
 }
@@ -1766,6 +1779,7 @@ body.--debug .player-overlay-message {
     background: url(#svg-icon-hint) hsl(220, 10%, 10%);
     border: 3px double hsl(220, 10%, 15%);
 }
+
 #player-game-area > .player-hint-wrapper > .player-hint-bg-icon {
     position: absolute;
     width: 8em;
