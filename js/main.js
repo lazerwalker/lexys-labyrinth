@@ -948,14 +948,14 @@ class Player extends PrimaryView {
         });
 
         // When we lose focus, act as though every key was released, and pause the game
-        window.addEventListener('blur', () => {
-            this.current_keys.clear();
-            this.current_touches = {};
+        // window.addEventListener('blur', () => {
+        //     this.current_keys.clear();
+        //     this.current_touches = {};
 
-            if (this.state === 'playing' || this.state === 'rewinding') {
-                this.autopause();
-            }
-        });
+        //     if (this.state === 'playing' || this.state === 'rewinding') {
+        //         this.autopause();
+        //     }
+        // });
         // Same when the window becomes hidden (especially important on phones, where this covers
         // turning the screen off!)
         document.addEventListener('visibilitychange', ev => {
@@ -4359,12 +4359,12 @@ class Conductor {
 
 
 async function main() {
-    setUpCommunication()
     let local = !! location.host.match(/localhost/);
     let query = new URLSearchParams(location.search);
 
     let conductor = new Conductor();
     await conductor.load();
+    setUpCommunication(conductor)
     window._conductor = conductor;
 
     // Allow putting us in debug mode automatically if we're in development
