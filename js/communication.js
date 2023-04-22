@@ -1,6 +1,6 @@
 // Handles communicating with the parent game via iframe
 export function setUpCommunication(conductor) {
-  window.parent.postMessage({type: "open"}, "http://localhost:1234")
+  window.parent.postMessage({type: "open"}, window.location.origin)
   window.addEventListener("message", (e) => {
     console.log("chips: Message received from parentt: " + JSON.stringify(e.data))
 
