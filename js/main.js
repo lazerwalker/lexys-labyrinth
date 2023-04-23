@@ -997,6 +997,7 @@ class Player extends PrimaryView {
         if (this._start_in_debug_mode) {
             this.setup_debug();
         }
+        this.set_state('playing');
     }
 
     // Link up the debug panel and enable debug features
@@ -4365,6 +4366,7 @@ async function main() {
     let conductor = new Conductor();
     await conductor.load();
     setUpCommunication(conductor)
+    conductor.player.set_state("playing")
     window._conductor = conductor;
 
     // Allow putting us in debug mode automatically if we're in development
