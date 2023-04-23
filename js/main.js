@@ -16,7 +16,7 @@ import { Tileset, TILESET_LAYOUTS, parse_tile_world_large_tileset, infer_tileset
 import TILE_TYPES from './tiletypes.js';
 import { random_choice, mk, mk_svg } from './util.js';
 import * as util from './util.js';
-import { setUpCommunication } from './communication.js'
+import { setUpCommunication, tappedScreen } from './communication.js'
 
 const PAGE_TITLE = "Lexy's Labyrinth";
 // This prefix is LLDEMO in base64, used to be somewhat confident that a string is a valid demo
@@ -584,11 +584,13 @@ class Player extends PrimaryView {
         // Bind buttons
         this.pause_button = this.root.querySelector('.control-pause');
         this.pause_button.addEventListener('click', ev => {
+            tappedScreen()
             this.toggle_pause();
             ev.target.blur();
         });
         this.restart_button = this.root.querySelector('.control-restart');
         this.restart_button.addEventListener('click', ev => {
+            tappedScreen()
             new ConfirmOverlay(this.conductor, "Abandon this attempt and try again?", () => {
                 this.restart_level();
             }).open();
@@ -596,11 +598,13 @@ class Player extends PrimaryView {
         });
         this.undo_button = this.root.querySelector('.control-undo');
         this.undo_button.addEventListener('click', ev => {
+            tappedScreen()
             this.undo_last_move();
             ev.target.blur();
         });
         this.rewind_button = this.root.querySelector('.control-rewind');
         this.rewind_button.addEventListener('click', ev => {
+            tappedScreen()
             if (this.state === 'rewinding') {
                 this.set_state('playing');
             }
@@ -611,6 +615,7 @@ class Player extends PrimaryView {
         // Game actions
         this.drop_button = this.root.querySelector('#player-actions .action-drop');
         this.drop_button.addEventListener('click', ev => {
+            tappedScreen()
             // Use the set of "buttons pressed between tics" because it's cleared automatically;
             // otherwise these will stick around forever
             this.current_keys_new.add('q');
@@ -618,11 +623,13 @@ class Player extends PrimaryView {
         });
         this.cycle_button = this.root.querySelector('#player-actions .action-cycle');
         this.cycle_button.addEventListener('click', ev => {
+            tappedScreen()
             this.current_keys_new.add('e');
             ev.target.blur();
         });
         this.swap_button = this.root.querySelector('#player-actions .action-swap');
         this.swap_button.addEventListener('click', ev => {
+            tappedScreen()
             this.current_keys_new.add('c');
             ev.target.blur();
         });
@@ -630,7 +637,11 @@ class Player extends PrimaryView {
         // Create the mobile pause menu, which consolidates buttons from around the desktop UI
         // TODO i really need to, uh, consolidate this
         let btn = (...args) => {
-            let onclick = args.pop();
+            const fn = args.pop();
+            let onclick = (e) => {
+                tappedScreen();
+                return fn(e);
+            }
 
             let props = {};
             let last = args[args.length - 1];
@@ -874,6 +885,7 @@ class Player extends PrimaryView {
             for (let touch of ev.changedTouches) {
                 this.touch_history[touch.identifier] = {x: touch.clientX, y: touch.clientY};
             }
+            tappedScreen()
         }
         let collect_touches = ev => {
             ev.stopPropagation();

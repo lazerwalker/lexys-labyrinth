@@ -21,3 +21,7 @@ export function setUpCommunication(conductor) {
     }
   })
 }
+
+export function tappedScreen() {
+  window.parent.postMessage({type: "tappedScreen"}, window.location.origin)
+}
