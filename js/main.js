@@ -23,6 +23,8 @@ const PAGE_TITLE = "Lexy's Labyrinth";
 // (it's 6 characters so it becomes exactly 8 base64 chars with no leftovers to entangle)
 const REPLAY_PREFIX = "TExERU1P";
 
+let playerHasNotMoved = true
+
 function format_replay_duration(t) {
     return `${t} tics (${util.format_duration(t / TICS_PER_SECOND)})`;
 }
@@ -1636,6 +1638,14 @@ class Player extends PrimaryView {
         for (let i = 0; i < tics; i++) {
             // FIXME turn-based mode should be disabled during a replay
             let input = this.get_input();
+
+            // If the player hadn't moved yet, start the timer
+            if (input !== 0 && playerHasNotMoved) {
+                console.log("chips: advanceby", input, this, this.level)
+                this.level.pause_timer()
+                playerHasNotMoved = false
+            }
+
             // Extract the fake 'wait' bit, if any
             let wait = input & INPUT_BITS['wait'];
             input &= ~wait;
@@ -4379,6 +4389,8 @@ async function main() {
     await conductor.load();
     setUpCommunication(conductor)
     conductor.player.set_state("playing")
+    playerHasNotMoved = true
+    conductor.player.level.pause_timer();
     window._conductor = conductor;
 
     // Allow putting us in debug mode automatically if we're in development
