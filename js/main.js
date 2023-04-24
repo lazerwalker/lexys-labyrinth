@@ -295,9 +295,11 @@ class SFXPlayer {
         this.player_x = null;
         this.player_y = null;
         this.sounds = {};
+        // Not yet using POP2 or STRIKE from MSCC
+        // plus others are missing
         this.sound_sources = {
             // handcrafted
-            blocked: 'sfx/mmf.ogg',
+            blocked: 'sfx/mscc/OOF3.wav',
             // https://jummbus.bitbucket.io/#j2N04bombn110s0k0l00e00t3Mm4a3g00j07i0r1O_U00o30T0v0pL0OD0Ou00q1d1f8y0z2C0w2c0h2T2v0kL0OD0Ou02q1d1f6y1z2C1w1b4gp1b0aCTFucgds0
             bomb: 'sfx/bomb.ogg',
             // https://jummbus.bitbucket.io/#j2N0cbutton-pressn100s0k0l00e00t3Mm1a3g00j07i0r1O_U0o3T0v0pL0OD0Ou00q1d1f3y1z1C2w0c0h0b4p1bJdn51eMUsS0
@@ -305,7 +307,7 @@ class SFXPlayer {
             // https://jummbus.bitbucket.io/#j2N0ebutton-releasen100s0k0l00e00t3Mm1a3g00j07i0r1O_U0o3T0v0pL0OD0Ou00q1d1f3y1z1C2w0c0h0b4p1aArdkga4sG0
             'button-release': 'sfx/button-release.ogg',
             // https://jummbus.bitbucket.io/#j2N04doorn110s0k0l00e00t3Mmfa3g00j07i0r1O_U00o30T0v0zL0OD0Ou00q0d1f8y0z2C0w2c0h0T2v0pL0OD0Ou02q0d1f8y3ziC0w1b4gp1f0aqEQ0lCNzrYUY0
-            door: 'sfx/door.ogg',
+            door: 'sfx/mscc/DOOR.wav',
             // https://jummbus.bitbucket.io/#j3N04dropn100s0k0l00e00t3Mm6a3g00j07i0r1O_U0o2T0v0pL0OaD0Ou00q1d1f4y2z9C0w2c0h0b4p1bGqKHGjner00
             drop: 'sfx/drop.ogg',
             // https://jummbus.bitbucket.io/#j3N0afake-floorn110s0k0l00e00t3Mm2a3g00j07i0r1O_U00o40T0v0zL0OaD0Ou10q0d0f8y0z1C2w2c0Gc0h0T2v05L0OaD0Ou02q1d7f4y1z3C1w1h0b4gp190apu0zzM0
@@ -315,13 +317,13 @@ class SFXPlayer {
             // https://jummbus.bitbucket.io/#j3N0aget-bonus2n100s1k0l00e00t50mba3g00j07i0r1O_U0o4T0v0pL0OaD0Ou00q1d5f8y0z2C1w0c0h8b4p1lFyWAxoHwmapK2cOeq6qU0
             'get-bonus2': 'sfx/get-bonus2.ogg',
             // https://jummbus.bitbucket.io/#j2N08get-chipn100s0k0l00e00t3Mmca3g00j07i0r1O_U0o4T0v0zL0OD0Ou00q1d1f6y1z2C0wac0h0b4p1dFyW7czgUK7aw0
-            'get-chip': 'sfx/get-chip.ogg',
+            'get-chip': 'sfx/mscc/click3.wav',
             // https://jummbus.bitbucket.io/#j3N0eget-chip-extran100s0k0l00e00t3Mmca3g00j07i0r1O_U0o4T0v0zL0OaD0Ou00q1d1f6y1z2C0wac0h0b4p1cFyW6p6xXel00
             'get-chip-extra': 'sfx/get-chip-extra.ogg',
             // https://jummbus.bitbucket.io/#j3N0eget-chip-extran100s0k0l00e00t3Mm5a3g00j07i0r1O_U0o4T0v0zL0OaD0Ou00q1d1f6y1z2C0wac0h0b4p1cFyW6p6xXel00
             'get-chip-last': 'sfx/get-chip-last.ogg',
             // https://jummbus.bitbucket.io/#j2N07get-keyn100s0k0l00e00t3Mmfa3g00j07i0r1O_U0o5T0v0pL0OD0Ou00q1d5f8y0z2C0w1c0h0b4p1dFyW85CbwwzBg0
-            'get-key': 'sfx/get-key.ogg',
+            'get-key': 'sfx/mscc/BLIP2.wav',
             // https://jummbus.bitbucket.io/#j3N0jget-stopwatch-bonusn100s1k0l00e00t50mca3g00j07i0r1O_U0o5T0v0pL0OaD0Ou00q0d1f7y1z2C1w4c0h8b4p19FyUsmIVk0
             'get-stopwatch-bonus': 'sfx/get-stopwatch-bonus.ogg',
             // https://jummbus.bitbucket.io/#j3N0lget-stopwatch-penaltyn100s1k0l00e00t50mca3g00j07i0r1O_U0o5T0v0pL0OaD0Ou00q0d1f7y1z2C1w4c0h8b4p19FyWxp8Vk0
@@ -337,7 +339,7 @@ class SFXPlayer {
             // https://jummbus.bitbucket.io/#j2N06socketn110s0k0l00e00t3Mm4a3g00j07i0r1O_U00o30T5v0pL0OD0Ou05q1d1f8y1z7C1c0h0HU7000U0006000ET2v0pL0OD0Ou02q1d6f5y3z2C0w0b4gp1xGoKHGhFBcn2FyPkxk0rE2AGcNCQyHwUY0
             socket: 'sfx/socket.ogg',
             // https://jummbus.bitbucket.io/#j2N06splashn110s0k0l00e00t3Mm5a3g00j07i0r1O_U00o20T0v0pL0OD0Ou00q0d0fay0z0C0w9c0h8T2v05L0OD0Ou02q2d6fay0z1C0w0b4gp1lGqKQxw_zzM5F4us60IbM0
-            splash: 'sfx/splash.ogg',
+            splash: 'sfx/mscc/WATER2.wav',
             // https://jummbus.bitbucket.io/#j3N0csplash-slimen110s0k0l00e00t3Mm2a3g00j07i0r1O_U00o20T0v0pL0OaD0Ou00q3d7f3y2z1C0w9c3h0T2v01L0OaD0Ou02q2d7f2y1z0C0w0h0b4gp1nJ5nqgGgGusu0J0zjb0i9Hw0
             'splash-slime': 'sfx/splash-slime.ogg',
             // https://jummbus.bitbucket.io/#j3N0bslide-forcen110s1k0l00e00t4Im3a3g00j07i0r1O_U00o40T1v05L0OaD0Ou01q0d7f3y0z1C0c0h0A0F0B0V1Q0000Pff00E0711T2v01L0OaD0Ou02q2d7fay5z1C0w0h0b4gp1bJ8n55isS000
@@ -361,7 +363,7 @@ class SFXPlayer {
             // https://jummbus.bitbucket.io/#j3N0astep-watern100s0k0l00e00t3Mm2a3g00j07i0r1O_U0o3T0v0kL0OaD0Ou00q1d6f2y0z0C1w9c0h3b4p1dJ5moMMAa16sG0
             'step-water': 'sfx/step-water.ogg',
             // https://jummbus.bitbucket.io/#j2N08teleportn110s1k0l00e00t3Mm7a3g00j07i0r1O_U00o50T0v0pL0OD0Ou00q1d1f8y4z6C2w5c4h0T2v0kL0OD0Ou02q1d7f8y4z3C1w4b4gp1wF2Uzh5wdC18yHH4hhBhHwaATXu0Asds0
-            teleport: 'sfx/teleport.ogg',
+            teleport: 'sfx/mscc/TELEPORT.wav',
             // https://jummbus.bitbucket.io/#j2N05thiefn100s1k0l00e00t3Mm3a3g00j07i0r1O_U0o1T0v0pL0OD0Ou00q1d1f5y1z8C2w2c0h0b4p1fFyUBBr9mGkKKds0
             thief: 'sfx/thief.ogg',
             // https://jummbus.bitbucket.io/#j3N0bthief-briben100s1k0l00e00t50mba3g00j07i0r1O_U0o5T0v0pL0OaD0Ou00q1d5fay0z2C1w2c0h3b4p1fF2G7P8YmgeBxNU0
@@ -370,7 +372,7 @@ class SFXPlayer {
             transmogrify: 'sfx/transmogrify.ogg',
 
             // handcrafted
-            lose: 'sfx/bummer.ogg',
+            lose: 'sfx/mscc/BUMMER.wav',
             // https://jummbus.bitbucket.io/#j2N04tickn100s0k0l00e00t3Mmca3g00j07i0r1O_U0o2T0v0pL0OD0Ou00q1d1f7y1ziC0w4c0h4b4p1bKqE6Rtxex00
             tick: 'sfx/tick.ogg',
             // https://jummbus.bitbucket.io/#j2N06timeupn100s0k0l00e00t3Mm4a3g00j07i0r1O_U0o3T1v0pL0OD0Ou01q1d5f4y1z8C1c0A0F0B0V1Q38e0Pa610E0861b4p1dIyfgKPcLucqU0
@@ -378,7 +380,7 @@ class SFXPlayer {
             // https://jummbus.bitbucket.io/#j3N04exitn200s0k0l00e00t2wm9a3g00j07i0r1O_U00o32T0v0uL0OaD0Ou00q1d1f5y1z1C2w1c2Gc0h0T0v0fL0OaD0Ou00q0d1f2y1z2C0w2c3h0b4gp1rFyW4xo2FGNixYe30kOesCnOjwM0
             exit: 'sfx/exit.ogg',
             // https://jummbus.bitbucket.io/#j2N03winn200s0k0l00e00t2wm9a3g00j07i0r1O_U00o32T0v0EL0OD0Ou00q1d1f5y1z1C2w1c2h0T0v0pL0OD0Ou00q0d1f2y1z2C0w2c3h0b4gp1xFyW4xo31pe0MaCHCbwLbM5cFDgapBOyY0
-            win: 'sfx/win.ogg',
+            win: 'sfx/mscc/DITTY1.wav',
             //from Ableton Retro Synths
             'revive': 'sfx/revive.ogg',
         };
