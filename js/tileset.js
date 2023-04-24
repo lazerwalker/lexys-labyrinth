@@ -2464,6 +2464,7 @@ export class Tileset {
         }
         if (! drawspec[state]) {
             console.warn("No such state", state, "for tile", name, tile);
+            return
         }
 
         this.draw_drawspec(drawspec[state], name, tile, packet);
