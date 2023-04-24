@@ -2907,6 +2907,10 @@ const BUILTIN_TILESETS = {
         tile_width: 32,
         tile_height: 32,
     },
+    mscc: {
+        name: "Microsoft",
+        src: 'tileset-mscc.gif'
+    }
 };
 
 // Report an error when a level fails to load
@@ -3028,7 +3032,7 @@ class OptionsOverlay extends DialogOverlay {
                 // FIXME again, wait, or what?
                 img.src = newdef.src;
                 newdef.tileset = new Tileset(
-                    img, TILESET_LAYOUTS[newdef.layout ?? 'lexy'],
+                    img, TILESET_LAYOUTS[newdef.layout ?? 'mscc'],
                     newdef.tile_width, newdef.tile_height);
             }
             this.available_tilesets[ident] = newdef;
@@ -3111,7 +3115,7 @@ class OptionsOverlay extends DialogOverlay {
                 let tileset_ident = this.root.elements[`tileset-${slot.ident}`].value;
                 let tilesetdef = this.available_tilesets[tileset_ident];
                 if (! tilesetdef) {
-                    tilesetdef = this.available_tilesets['lexy'];
+                    tilesetdef = this.available_tilesets['mscc'];
                 }
 
                 chosen_tilesets[slot.ident] = tilesetdef;
@@ -3973,7 +3977,7 @@ class Conductor {
         this.tilesets = {};  // slot (game type) => tileset
         let tileset_promises = [];
         for (let slot of TILESET_SLOTS) {
-            let tileset_ident = this.options.tilesets[slot.ident] ?? 'lexy';
+            let tileset_ident = this.options.tilesets[slot.ident] ?? 'mscc';
             let tilesetdef;
             if (BUILTIN_TILESETS[tileset_ident]) {
                 tilesetdef = BUILTIN_TILESETS[tileset_ident];
@@ -3997,7 +4001,14 @@ class Conductor {
             // that the editor relies on having a tileset available immediately, ugh
             let promise = util.promise_event(img, 'load', 'error').then(() => {
                 let tileset;
-                if (tilesetdef.layout === 'tw-animated') {
+                if (!tilesetdef.layout) {
+                    try {
+                        tileset = infer_tileset_from_image(img, (w, h) => mk('canvas', {width: w, height: h}));
+                    } catch (err) {
+                        console.log(err)
+                        return
+                    }
+                } else if (tilesetdef.layout === 'tw-animated') {
                     // This layout is dynamic so we need to reparse it
                     let canvas = mk('canvas', {width: img.naturalWidth, height: img.naturalHeight});
                     canvas.getContext('2d').drawImage(img, 0, 0);
