@@ -331,7 +331,7 @@ class SFXPlayer {
             // https://jummbus.bitbucket.io/#j3N0kget-stopwatch-togglen100s0k0l00e00t50mca3g00j07i0r1O_U0o5T0v0pL0OaD0Ou00q0d1f7y1z2C1w4c0h8b4p19FyWxq3Bg0
             'get-stopwatch-toggle': 'sfx/get-stopwatch-toggle.ogg',
             // https://jummbus.bitbucket.io/#j2N08get-tooln100s0k0l00e00t3Mm6a3g00j07i0r1O_U0o2T0v0pL0OD0Ou00q1d1f4y2z9C0w2c0h0b4p1bGqKNW4isVk0
-            'get-tool': 'sfx/get-tool.ogg',
+            'get-tool': 'sfx/mscc/BLIP2.wav',
             // https://jummbus.bitbucket.io/#j3N07popwalln110s0k0l00e00t3Mm2a3g00j07i0r1O_U00o40T0v0zL0OaD0Ou10q0d0f8y0z1C2w2c0Gc0h0T2v0aL0OaD0Ou02q1d5f1y0z3C1w1h0b4gp190ap6Ker00
             popwall: 'sfx/popwall.ogg',
             // https://jummbus.bitbucket.io/#j3N04pushn110s0k0l00e00t3Mm3a3g00j07i0r1O_U00o30T5v0pL0OaD0Ou50q1d5f8y1z6C1c0h0H-JJAArrqiih999T2v01L0OaD0Ou02q2d2f6y1zhC0w0h0b4gp1f0bkoUzCcqy1FMo0
