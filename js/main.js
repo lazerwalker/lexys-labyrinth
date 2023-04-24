@@ -2447,6 +2447,13 @@ class Player extends PrimaryView {
 
 
 const BUILTIN_LEVEL_PACKS = [{
+    path: 'levels/CHIPS.dat',
+    preview: 'levels/previews/lexys-lessons.png',
+    ident: "CHIPS.DAT",
+    title: "CHIPS.DAT",
+    desc: "The OG",
+},
+{
     path: 'levels/lexys-lessons.zip',
     preview: 'levels/previews/lexys-lessons.png',
     ident: "Lexy's Lessons",
@@ -4054,9 +4061,8 @@ class Conductor {
         document.querySelector('#loading').setAttribute('hidden', '');
 
         // Force load the classic pack and start on the player
-        // TODO: Include CHIPS.DAT if we have permission
-        const cclp1 = BUILTIN_LEVEL_PACKS.find(p => p.ident === 'cclp1');
-        await this.fetch_pack(cclp1.path, cclp1.title);
+        const chips = BUILTIN_LEVEL_PACKS.find(p => p.ident === 'CHIPS.DAT');
+        await this.fetch_pack(chips.path, chips.title);
         this.switch_to_player();
         // this.switch_to_splash()
     }
