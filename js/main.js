@@ -723,6 +723,8 @@ class Player extends PrimaryView {
         this.using_touch = false;  // true if using touch controls
         this.current_keys = new Set;  // keys that are currently held
         this.current_keys_new = new Set; // keys that were pressed since input was last read
+        this.mousemove_queue = []; // Queued list of moves triggered by a mouseclick
+
         // TODO this could all probably be more rigorous but it's fine for now
         key_target.addEventListener('keydown', ev => {
             if (! this.active)
@@ -868,7 +870,6 @@ class Player extends PrimaryView {
         let touch_target = this.root.querySelector('#player-game-area .level');
         let start_touches = ev => {
             ev.stopPropagation();
-            ev.preventDefault();
             this.using_touch = true;
             for (let touch of ev.changedTouches) {
                 this.touch_history[touch.identifier] = {x: touch.clientX, y: touch.clientY};
@@ -915,6 +916,37 @@ class Player extends PrimaryView {
                 this.set_state('playing');
             }
         };
+
+        let handle_click = (ev) => {           
+            let [px, py] = this.level.player.visual_position();
+            const [x, y] = this.renderer
+            .point_to_real_cell_coords(ev.clientX, ev.clientY)
+            .map(Math.floor);
+            let dx = px - x;
+            let dy = py - y;
+            
+            while (Math.abs(dx) !== 0 || Math.abs(dy) !== 0) {
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    if (dx < 0) {
+                        this.mousemove_queue.push("right");
+                        dx += 1;
+                    } else {
+                        this.mousemove_queue.push("left");
+                        dx -= 1;
+                    }
+                } else {
+                    if (dy < 0) {
+                        this.mousemove_queue.push("down");
+                        dy += 1;
+                    } else {
+                        this.mousemove_queue.push("up");
+                        dy -= 1;
+                    }
+                }
+            }
+        };
+      
+        touch_target.addEventListener("click", handle_click);
         touch_target.addEventListener('touchstart', start_touches);
         touch_target.addEventListener('touchmove', collect_touches);
         let dismiss_touches = ev => {
@@ -1605,6 +1637,15 @@ class Player extends PrimaryView {
             this.current_keys_new.clear();
             for (let action of Object.values(this.current_touches)) {
                 input |= INPUT_BITS[action];
+            }
+        }
+
+        if (this.mousemove_queue.length > 0) {
+            // Traversing the level graph like this feels janky
+            const player_tile = this.level.actors
+                .find((a) => a.type.name === "player");
+            if (player_tile?.movement_cooldown <= 0) {
+                input |= INPUT_BITS[this.mousemove_queue.shift()];
             }
         }
 

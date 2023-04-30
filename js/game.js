@@ -1073,6 +1073,9 @@ export class Level extends LevelInterface {
 
         // Track whether the player is blocked, both for visual effect and for doppelgangers
         if (actor === this.player && ! success) {
+            // TODO: Not sure this does anything, nor if it's the right place for it
+            if (this.mousemove_queue) this.mousemove_queue = [];
+
             if (actor.last_blocked_direction !== actor.direction) {
                 // This is only used for checking when to play the mmf sound, doesn't need undoing;
                 // it's cleared when we make a successful move or a null decision
